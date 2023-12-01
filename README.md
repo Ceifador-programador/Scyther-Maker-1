@@ -1,4 +1,6 @@
 # Scyther-Maker-1
+#the text below is in Portuguese:
+
 #dependencias para isto funcionar:  -ngrok -metasploit-framework -apktool -apksigner -zipalign -ruby gems
 
 
